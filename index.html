@@ -1,0 +1,234 @@
+> Night:
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LoveChat — Знакомства и Общение</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(to right, #2c3e50, #4ca1af);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      padding: 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+
+    .card {
+      background-color: rgba(0,0,0,0.5);
+      padding: 20px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 500px;
+      margin: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: none;
+      border-radius: 5px;
+      background: #f0f0f0;
+      color: #333;
+    }
+
+    input[type="file"] {
+      background: none;
+      color: white;
+    }
+
+    button {
+      background-color: #27ae60;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      margin-top: 15px;
+      font-size: 1em;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #2ecc71;
+    }
+
+    .avatar-preview {
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .avatar-preview img {
+      max-width: 100px;
+      border-radius: 50%;
+      border: 2px solid white;
+    }
+
+    .lang-select {
+      text-align: right;
+      margin-bottom: 10px;
+    }
+
+    .chat-box {
+      margin-top: 20px;
+      max-height: 200px;
+      overflow-y: auto;
+      border-top: 1px solid #aaa;
+      padding-top: 10px;
+    }
+
+    .message {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 10px;
+      border-radius: 6px;
+      margin: 5px 0;
+    }
+
+    .decor {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 200px;
+      background: url('https://svgshare.com/i/14X4.svg') center/cover no-repeat;
+      opacity: 0.1;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="decor"></div>
+
+<header>
+  <h1>💖 LoveChat</h1>
+  <p>Знакомьтесь, общайтесь и находите любовь!</p>
+</header>
+
+<div class="card">
+  <div class="lang-select">
+    <label for="language">🌐 Язык:</label>
+    <select id="language">
+      <option value="ru" selected>Русский</option>
+      <option value="en">English</option>
+    </select>
+  </div>
+
+  <form id="registerForm">
+    <label for="name">Имя:</label>
+    <input type="text" id="name" required />
+
+    <label for="region">Регион:</label>
+    <select id="region">
+      <option>Москва</option>
+      <option>Санкт-Петербург</option>
+      <option>Новосибирск</option>
+      <option>Екатеринбург</option>
+      <option>Другое</option>
+    </select>
+
+    <label for="avatar">Фото (аватар):</label>
+    <input type="file" id="avatar" accept="image/*" />
+
+    <div class="avatar-preview" id="avatarPreview"></div>
+
+    <button type="submit">Зарегистрироваться</button>
+  </form>
+</div>
+
+<div class="card" id="chatCard" style="display:none;">
+  <h2>💬 Чат</h2>
+  <div class="chat-box" id="chatBox"></div>
+
+  <input type="text" id="messageInput" placeholder="Напишите сообщение..." />
+  <button onclick="sendMessage()">Отправить</button>
+
+  <hr/>
+  <button onclick="alert('Голосовой чат пока в разработке! 🎤')">🔊 Подключить голосовой чат</button>
+</div>
+
+<script>
+  const form = document.getElementById("registerForm");
+  const avatarInput = document.getElementById("avatar");
+  const avatarPreview = document.getElementById("avatarPreview");
+  const chatCard = document.getElementById("chatCard");
+  const chatBox = document.getElementById("chatBox");
+  const messageInput = document.getElementById("messageInput");
+
+  avatarInput.addEventListener("change", function () {
+    const file = this.files[0];
+    if (file && file.type.startsWith("image/")) {
+
+> Night:
+const reader = new FileReader();
+      reader.onload = function (e) {
+        avatarPreview.innerHTML = '<img src="' + e.target.result + '" />';
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const name = document.getElementById("name").value;
+    const region = document.getElementById("region").value;
+    const language = document.getElementById("language").value;
+
+    alert(`${name}, вы зарегистрированы! Добро пожаловать из региона "${region}".`);
+    form.style.display = "none";
+    chatCard.style.display = "block";
+  });
+
+  function sendMessage() {
+    const text = messageInput.value.trim();
+    if (text) {
+      const div = document.createElement("div");
+      div.className = "message";
+      div.textContent = "Вы: " + text;
+      chatBox.appendChild(div);
+      messageInput.value = "";
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+  }
+
+  // Переключение языка (упрощённо)
+  document.getElementById("language").addEventListener("change", function () {
+    const lang = this.value;
+    if (lang === "en") {
+      alert("Language switched to English (interface demo only)");
+      document.querySelector("h1").textContent = "💖 LoveChat";
+      document.querySelector("p").textContent = "Meet, chat and find love!";
+      document.querySelector("label[for='name']").textContent = "Name:";
+      document.querySelector("label[for='region']").textContent = "Region:";
+      document.querySelector("label[for='avatar']").textContent = "Photo (avatar):";
+      document.querySelector("button[type='submit']").textContent = "Register";
+      document.querySelector("h2").textContent = "💬 Chat";
+      document.getElementById("messageInput").placeholder = "Type a message...";
+    } else {
+      location.reload(); // просто перезагружает на русский
+    }
+  });
+</script>
+
+</body>
+</html>
